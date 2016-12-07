@@ -1,6 +1,8 @@
 package edu.kvcc.cis298.cis298assignment4;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
@@ -8,9 +10,11 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+
 
 /**
  * Created by David Barnes on 11/3/2015.
@@ -20,12 +24,17 @@ public class BeverageFragment extends Fragment {
     //String key that will be used to send data between fragments
     private static final String ARG_BEVERAGE_ID = "crime_id";
 
+    private static final int REQUEST_CONTACT = 1;
+
+
     //private class level vars for the model properties
     private EditText mId;
     private EditText mName;
     private EditText mPack;
     private EditText mPrice;
     private CheckBox mActive;
+    private Button mContactsButton;
+    private Button mEmailButton;
 
     //Private var for storing the beverage that will be displayed with this fragment
     private Beverage mBeverage;
@@ -64,6 +73,8 @@ public class BeverageFragment extends Fragment {
         mPack = (EditText) view.findViewById(R.id.beverage_pack);
         mPrice = (EditText) view.findViewById(R.id.beverage_price);
         mActive = (CheckBox) view.findViewById(R.id.beverage_active);
+        mContactsButton = (Button) view.findViewById(R.id.beverage_contact_button);
+        mEmailButton = (Button) view.findViewById(R.id.beverage_email_button);
 
         //Set the widgets to the properties of the beverage
         mId.setText(mBeverage.getId());
@@ -151,7 +162,57 @@ public class BeverageFragment extends Fragment {
             }
         });
 
+
+        final Intent pickContact = new Intent(Intent.ACTION_PICK,
+                ContactsContract.Contacts.CONTENT_URI);
+
+       mContactsButton.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View view) {
+           startActivityForResult(pickContact, REQUEST_CONTACT);
+           }
+       });
+
+        mEmailButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent emailIntent = new Intent(Intent.ACTION_SEND);
+
+                emailIntent.setType("text/plain");
+
+                emailIntent.putExtra(Intent.EXTRA_SUBJECT, );
+                emailIntent.putExtra(Intent.EXTRA_TEXT, wineInfo());
+
+
+
+            }
+        });
+
+
+
         //Lastley return the view with all of this stuff attached and set on it.
         return view;
+    }
+
+    private String wineInfo() {
+
+        String header = "Beverage App Item Information";
+
+        String request = "Please Review The Following Beverage:";
+
+        String availability = "";
+
+        if(mBeverage.isActive() == true)
+        {
+            availability = "Currently Active";
+        }
+        else
+        {
+            availability= "Currently Inactive";
+        }
+
+        String wInfo = getString(header, contact, request, mBeverage.getId(), mBeverage.getName(), mBeverage.getPack(), mBeverage.getPrice(), availability);
+
+        return wInfo;
     }
 }
