@@ -1,6 +1,11 @@
+//Jordan Koehler
+//MW 2:30 - 4:45
+//December 11th, 2016
+
 package edu.kvcc.cis298.cis298assignment4;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -22,6 +27,14 @@ public class BeverageListFragment extends Fragment {
     //Private variables for the recycler view and the required adapter
     private RecyclerView mBeverageRecyclerView;
     private BeverageAdapter mBeverageAdapter;
+
+    //Added this so that we can call the method that we use to fetch our Bevs off the internet.
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        new FetchBevsTask().execute();
+    }
 
     @Nullable
     @Override
@@ -59,9 +72,9 @@ public class BeverageListFragment extends Fragment {
 
         //If there is no adapter, make a new one and send it in the list of beverages
         if (mBeverageAdapter == null) {
-            mBeverageAdapter = new BeverageAdapter(beverages);
-            //set the adapter for the recyclerview to the newly created adapter
-            mBeverageRecyclerView.setAdapter(mBeverageAdapter);
+
+            setupAdapter();
+
         } else {
             //adapter already exists, so just call the notify data set changed method to update
             mBeverageAdapter.notifyDataSetChanged();
@@ -151,4 +164,36 @@ public class BeverageListFragment extends Fragment {
             return mBeverages.size();
         }
     }
+
+    //Loads the adapter with Beverages
+    private void setupAdapter() {
+        if(isAdded()) {
+
+            BeverageCollection bevs = BeverageCollection.get(getActivity());
+
+            mBeverageAdapter = new BeverageAdapter(bevs.getBeverages());
+
+            mBeverageRecyclerView.setAdapter(mBeverageAdapter);
+        }
+    }
+
+    //Fetches a lovely list of Beverages out off of the internet. Loads them in the background, and updates the Beverage Collection upon completion.
+    private class FetchBevsTask extends AsyncTask<Void, Void, List<Beverage>>
+    {
+        @Override
+        protected List<Beverage> doInBackground(Void... params) {
+            return new BeverageFetcher().fetchBeverages();
+        }
+
+        @Override
+        protected void onPostExecute(List<Beverage> beverages) {
+
+            BeverageCollection bevs = BeverageCollection.get(getActivity());
+
+            bevs.setBevs(beverages);
+
+            setupAdapter();
+        }
+    }
+
 }

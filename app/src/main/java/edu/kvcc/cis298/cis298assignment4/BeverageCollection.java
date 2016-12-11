@@ -1,3 +1,7 @@
+//Jordan Koehler
+//MW 2:30 - 4:45
+//December 11th, 2016
+
 package edu.kvcc.cis298.cis298assignment4;
 
 import android.content.Context;
@@ -40,7 +44,8 @@ public class BeverageCollection {
         //Set the context to the one that is passed in
         mContext = context;
         //Call the private method to load the beverage list
-        loadBeverageList();
+        //loadBeverageList(); We aren't loading from the CSV anymore so we don't need this.
+
     }
 
     //Getters
@@ -55,6 +60,13 @@ public class BeverageCollection {
             }
         }
         return null;
+    }
+
+    //Setters
+
+    //Added this so that we can set the beverages to what we pull off the internet.
+    public void setBevs(List<Beverage> bevs) {
+        mBeverages = bevs;
     }
 
     //Method to load the beverage list from a CSV file

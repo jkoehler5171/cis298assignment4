@@ -2,6 +2,7 @@
 ## Due 12-12-2016
 ## Author
 
+Jordan Koehler
 
 
 ## Description
@@ -86,10 +87,11 @@ The application must do all of the above work to get the extra credit. In order 
 
 ## Outside Resources Used
 
+SO MUCH STACK OVERFLOW. Also I relied hugely on the in class program.
 
 
 ## Known Problems, Issues, And/Or Errors in the Program
-
+None that I know of.
 
 
 # Original Assignment README

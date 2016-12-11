@@ -117,11 +117,13 @@
 
     <Button
         android:id="@+id/beverage_contact_button"
+        android:text="Select Contact"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
     <Button
         android:id="@+id/beverage_email_button"
+        android:text="Send Report"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
